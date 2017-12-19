@@ -1,0 +1,70 @@
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: Get VMs
+      ovirt_vms_facts:
+        auth:
+          url: "https://ovirt.example.com/ovirt-engine/api"
+          username: "admin@internal"
+          password: "123456"
+          insecure: true
+        pattern: 'name=myvm*'
+        fetch_nested: true
+        nested_attributes: ips
+
+    - name: Print VM IP
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmip }}"
+
+    - name: Print VM all IPs
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmips }}"
+
+    - name: Print VM IPv4
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmipv4 }}"
+
+    - name: Print VM all IPv4
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmipsv4 }}"
+
+    - name: Print VM IPv6
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmipv6 }}"
+
+    - name: Print VM all IPv6
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmipsv6 }}"
+
+    # *********************************************************
+    # *********************************************************
+    - name: ----
+      debug:
+        msg: "-------------------------------------"
+    # *********************************************************
+    # Print VM IPs as dictionaries with name as key
+    # *********************************************************
+    - name: Print VM IP
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmip(attr='name') }}"
+
+    - name: Print VM all IPs
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmips(attr='name') }}"
+
+    - name: Print VM IPv4
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmipv4(attr='name') }}"
+
+    - name: Print VM all IPv4
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmipsv4(attr='name') }}"
+
+    - name: Print VM IPv6
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmipv6(attr='name') }}"
+
+    - name: Print VM all IPv6
+      debug:
+        msg: "{{ ovirt_vms | ovirtvmipsv6(attr='name') }}"
