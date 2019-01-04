@@ -1,0 +1,29 @@
+- hosts: localhost
+  connection: local
+
+  vars:
+    myauth:
+      url: "https://ovirt.example.com/ovirt-engine/api"
+      username: "admin@internal"
+      password: "password"
+
+    myvm: myvm
+
+  tasks:
+    - name: Get VM myvm
+      ovirt_vm_facts:
+        auth: "{{ myauth }}"
+        pattern: 'name={{ myvm }}'
+        next_run: false
+      register: vm
+
+    - name: Get next_run of VM myvm
+      ovirt_vm_facts:
+        auth: "{{ myauth }}"
+        pattern: 'name={{ myvm }}'
+        next_run: true
+      register: vm_next_run
+
+    - name: Print what will be changed in next run of the VM
+      debug:
+        msg: "{{ vm.ovirt_vms[0] | ovirtdiff(vm_next_run.ovirt_vms[0]) }}"
